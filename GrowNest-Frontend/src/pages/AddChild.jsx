@@ -89,7 +89,7 @@ export default function AddChild() {
                 .map(a => a.trim())
                 .filter(a => a.length > 0);
 
-            const response = await fetch('http://localhost:5000/api/children', {
+            const response = await fetch('https://grownest-backend-5xa2.onrender.com/api/children', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

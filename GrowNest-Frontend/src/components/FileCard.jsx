@@ -13,7 +13,7 @@ export default function FileCard({ file, onDelete }) {
   const Icon = isPdf ? FileText : Image;
 
   // The secret sauce: getting the file straight from your Express server!
-  const fileUrl = `http://localhost:5000/uploads/${file.file_name}`;
+  const fileUrl = `https://grownest-backend-5xa2.onrender.com/uploads/${file.file_name}`;
 
   return (
     <div className="card-hover p-4 group">

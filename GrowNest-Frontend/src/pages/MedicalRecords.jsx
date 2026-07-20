@@ -19,7 +19,7 @@ export default function MedicalRecords() {
     if (!child) return;
     const fetchRecords = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/children/${child.id}/records`);
+        const response = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/records`);
         if (response.ok) {
           const data = await response.json();
           setRecords(data);
@@ -41,7 +41,7 @@ export default function MedicalRecords() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/records/${id}`, { method: 'DELETE' });
+      const response = await fetch(`https://grownest-backend-5xa2.onrender.com/api/records/${id}`, { method: 'DELETE' });
       if (response.ok) {
         setRecords(prev => prev.filter(r => r.id !== id));
         showToast('File deleted', 'success');
@@ -72,14 +72,14 @@ export default function MedicalRecords() {
     formData.append('category', 'Reports'); 
 
     try {
-      const response = await fetch(`http://localhost:5000/api/children/${child.id}/records`, {
+      const response = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/records`, {
         method: 'POST',
         body: formData
       });
       
       if (response.ok) {
         showToast('File uploaded successfully!', 'success');
-        const fetchRes = await fetch(`http://localhost:5000/api/children/${child.id}/records`);
+        const fetchRes = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/records`);
         const data = await fetchRes.json();
         setRecords(data);
       } else {

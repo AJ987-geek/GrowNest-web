@@ -29,14 +29,14 @@ export const AppProvider = ({ children }) => {
       setAppLoading(true);
       try {
         // Fetch User Profile
-        const userRes = await fetch(`http://localhost:5000/api/user/${activeUserId}`);
+        const userRes = await fetch(`https://grownest-backend-5xa2.onrender.com/api/user/${activeUserId}`);
         if (userRes.ok) {
           const userData = await userRes.json();
           setUser(userData);
         }
 
         // Fetch User's Children
-        const childRes = await fetch(`http://localhost:5000/api/user/${activeUserId}/children`);
+        const childRes = await fetch(`https://grownest-backend-5xa2.onrender.com/api/user/${activeUserId}/children`);
         if (childRes.ok) {
           const childrenData = await childRes.json();
           if (childrenData.length > 0) {

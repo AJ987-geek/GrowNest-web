@@ -15,7 +15,7 @@ export default function ChildProfile() {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/children/${child.id}`, {
+      const response = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)

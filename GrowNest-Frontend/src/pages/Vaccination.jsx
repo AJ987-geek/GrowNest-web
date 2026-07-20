@@ -14,7 +14,7 @@ export default function Vaccination() {
 
     const fetchVaccines = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/children/${child.id}/vaccinations`);
+        const response = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/vaccinations`);
         if (response.ok) {
           const data = await response.json();
           // Map MySQL column to UI prop
@@ -35,7 +35,7 @@ export default function Vaccination() {
 
   const handleMarkComplete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/vaccinations/${id}`, {
+      const response = await fetch(`https://grownest-backend-5xa2.onrender.com/api/vaccinations/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'completed' })
