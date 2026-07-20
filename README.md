@@ -5,7 +5,7 @@ GrowNest is a comprehensive, full-stack child health and development tracking ap
 ---
 
 ## 🚀 Live Demo
-* **Frontend (Vercel):** [https://grow-nest-web.vercel.app/](https://grow-nest-web.vercel.app/)
+* **(Vercel):** [https://grow-nest-web.vercel.app/](https://grow-nest-web.vercel.app/)
 
 > ⚠️ **IMPORTANT NOTE FOR JUDGES / TESTERS:** 
 > The backend servers and the AI microservice are hosted on **Render's Free Tier**. To save resources, Render automatically puts these servers to "sleep" after 15 minutes of inactivity. 
@@ -44,3 +44,28 @@ If you want to run this project locally on your machine:
 ```bash
 git clone https://github.com/AJ987-geek/GrowNest-web.git
 cd GrowNest-web
+``` 
+
+**2. Start the React Frontend**
+```bash
+cd GrowNest-Frontend
+npm install
+npm run dev
+```
+**3. Start the Node.js Backend**
+```bash
+cd GrowNest-Backend
+npm install
+node server.js
+```
+**Start the Python AI Microservice**
+```bash
+cd GrowNest-AI
+pip install -r requirements.txt
+uvicorn main:app --host 0.0.0.0 --port 10000
+```
+5. Database Configuration This project requires a MySQL database. To run it locally:
+
+Create a .env file inside the GrowNest-Backend folder.
+Add your database credentials like this: DB_HOST=your_host DB_PORT=your_port DB_USER=your_user DB_PASSWORD=your_password DB_NAME=your_database
+Import the provided database_backup.sql file into your MySQL database to build the tables.
