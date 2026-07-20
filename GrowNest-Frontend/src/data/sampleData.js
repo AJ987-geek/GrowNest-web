@@ -1,0 +1,158 @@
+export const vaccineData = [
+  { id: 1, name: 'BCG', dueAge: 'At birth', status: 'completed', date: '2021-03-15', notes: 'Given at hospital' },
+  { id: 2, name: 'Hepatitis B (1st)', dueAge: 'At birth', status: 'completed', date: '2021-03-15', notes: '' },
+  { id: 3, name: 'OPV (1st)', dueAge: '6 weeks', status: 'completed', date: '2021-04-26', notes: '' },
+  { id: 4, name: 'DTP (1st)', dueAge: '6 weeks', status: 'completed', date: '2021-04-26', notes: '' },
+  { id: 5, name: 'Hib (1st)', dueAge: '6 weeks', status: 'completed', date: '2021-04-26', notes: '' },
+  { id: 6, name: 'Rotavirus (1st)', dueAge: '6 weeks', status: 'completed', date: '2021-04-26', notes: '' },
+  { id: 7, name: 'PCV (1st)', dueAge: '6 weeks', status: 'completed', date: '2021-04-26', notes: '' },
+  { id: 8, name: 'MMR (1st)', dueAge: '9 months', status: 'completed', date: '2021-12-15', notes: '' },
+  { id: 9, name: 'Varicella (1st)', dueAge: '15 months', status: 'completed', date: '2022-06-15', notes: '' },
+  { id: 10, name: 'MMR (2nd)', dueAge: '15 months', status: 'upcoming', date: '2026-09-15', notes: 'Due soon' },
+  { id: 11, name: 'DTP Booster', dueAge: '18 months', status: 'upcoming', date: '2026-09-20', notes: '' },
+  { id: 12, name: 'Typhoid', dueAge: '2 years', status: 'missed', date: '2023-03-15', notes: 'Rescheduled' },
+  { id: 13, name: 'Hepatitis A (2nd)', dueAge: '2 years', status: 'missed', date: '2023-06-15', notes: '' },
+  { id: 14, name: 'Flu Vaccine (Annual)', dueAge: 'Yearly', status: 'upcoming', date: '2026-10-01', notes: 'Annual flu shot' },
+];
+
+export const growthData = [
+  { month: 'Jan', height: 80, weight: 10.5 },
+  { month: 'Feb', height: 81, weight: 10.8 },
+  { month: 'Mar', height: 82, weight: 11.0 },
+  { month: 'Apr', height: 83, weight: 11.3 },
+  { month: 'May', height: 84, weight: 11.6 },
+  { month: 'Jun', height: 85, weight: 11.9 },
+  { month: 'Jul', height: 87, weight: 12.2 },
+  { month: 'Aug', height: 88, weight: 12.5 },
+  { month: 'Sep', height: 89, weight: 12.8 },
+  { month: 'Oct', height: 90, weight: 13.0 },
+  { month: 'Nov', height: 91, weight: 13.3 },
+  { month: 'Dec', height: 92, weight: 13.5 },
+];
+
+export const nutritionData = [
+  { day: 'Mon', calories: 1180, protein: 28, carbs: 150, fat: 40 },
+  { day: 'Tue', calories: 1220, protein: 32, carbs: 160, fat: 38 },
+  { day: 'Wed', calories: 1100, protein: 25, carbs: 140, fat: 35 },
+  { day: 'Thu', calories: 1300, protein: 35, carbs: 170, fat: 42 },
+  { day: 'Fri', calories: 1250, protein: 30, carbs: 165, fat: 39 },
+  { day: 'Sat', calories: 1400, protein: 38, carbs: 180, fat: 45 },
+  { day: 'Sun', calories: 1350, protein: 36, carbs: 175, fat: 44 },
+];
+
+export const communityPosts = [
+  {
+    id: 1,
+    author: 'PedsParent_2019',
+    avatar: null,
+    category: 'Nutrition',
+    title: 'Best iron-rich foods for toddlers who refuse meat?',
+    content: 'My 2-year-old has been diagnosed with mild anemia. Looking for creative ways to add iron to her diet without meat. She loves pasta and dairy. Any ideas?',
+    upvotes: 47,
+    comments: 23,
+    time: '2h ago',
+    tags: ['nutrition', 'anemia', 'toddler'],
+    pinned: false,
+  },
+  {
+    id: 2,
+    author: 'FirstTimeDad_Ben',
+    avatar: null,
+    category: 'Vaccination',
+    title: 'Is mild fever after MMR vaccine normal?',
+    content: 'My son got his MMR vaccine yesterday and has had a low-grade fever of 99.5°F since then. Pediatrician said it is normal but wanted to hear from other parents too.',
+    upvotes: 82,
+    comments: 41,
+    time: '5h ago',
+    tags: ['mmr', 'vaccine', 'fever'],
+    pinned: true,
+  },
+  {
+    id: 3,
+    author: 'MomOf3_KC',
+    avatar: null,
+    category: 'Sleep',
+    title: 'Sleep training methods - what worked for you?',
+    content: 'We tried the Ferber method with our first two and it worked great. Now trying with our 8-month-old but having no luck. Has anyone tried gentle sleep training with success?',
+    upvotes: 125,
+    comments: 67,
+    time: '1d ago',
+    tags: ['sleep', 'training', 'baby'],
+    pinned: false,
+  },
+  {
+    id: 4,
+    author: 'HealthyKidsMom',
+    avatar: null,
+    category: 'Growth',
+    title: 'Height concerns - my 4yo is below the 5th percentile',
+    content: 'Our pediatrician mentioned Emma is below the 5th percentile for height. She eats well and seems healthy. Has anyone dealt with this? Did your child catch up?',
+    upvotes: 63,
+    comments: 34,
+    time: '2d ago',
+    tags: ['growth', 'height', 'percentile'],
+    pinned: false,
+  },
+  {
+    id: 5,
+    author: 'ActiveDad_Ryan',
+    avatar: null,
+    category: 'Parenting',
+    title: 'Screen time limits that actually work - share your strategies',
+    content: 'We set strict 1 hour screen time for our 6yo but he keeps sneaking the tablet. Looking for practical strategies that have worked for other families.',
+    upvotes: 98,
+    comments: 52,
+    time: '3d ago',
+    tags: ['screentime', 'parenting', 'tips'],
+    pinned: false,
+  },
+];
+
+export const activitiesData = {
+  physical: [
+    { id: 1, name: 'Cycling', icon: '🚲', duration: '30 min', intensity: 'Medium', ageRange: '4-10', calories: 120, description: 'Balance bike or regular cycling in the park' },
+    { id: 2, name: 'Swimming', icon: '🏊', duration: '45 min', intensity: 'High', ageRange: '3-10', calories: 150, description: 'Pool swimming with float or supervised sessions' },
+    { id: 3, name: 'Running & Tag', icon: '🏃', duration: '20 min', intensity: 'High', ageRange: '3-10', calories: 100, description: 'Outdoor running games and tag with friends' },
+    { id: 4, name: 'Outdoor Play', icon: '⚽', duration: '60 min', intensity: 'Low', ageRange: '2-10', calories: 80, description: 'Playground, slide, swings, and free play' },
+    { id: 5, name: 'Dancing', icon: '💃', duration: '30 min', intensity: 'Medium', ageRange: '2-10', calories: 90, description: 'Freestyle dancing to favorite songs' },
+    { id: 6, name: 'Yoga for Kids', icon: '🧘', duration: '20 min', intensity: 'Low', ageRange: '4-10', calories: 50, description: 'Simple yoga poses and breathing exercises' },
+  ],
+  learning: [
+    { id: 7, name: 'Reading Together', icon: '📚', duration: '20 min', benefit: 'Language', ageRange: '1-10', description: 'Read picture books or chapter books aloud' },
+    { id: 8, name: 'Puzzles', icon: '🧩', duration: '30 min', benefit: 'Problem Solving', ageRange: '2-10', description: 'Age-appropriate jigsaw puzzles or brain teasers' },
+    { id: 9, name: 'Storytelling', icon: '📖', duration: '15 min', benefit: 'Creativity', ageRange: '2-8', description: 'Make up stories together using picture prompts' },
+    { id: 10, name: 'Science Experiments', icon: '🔬', duration: '40 min', benefit: 'STEM', ageRange: '4-10', description: 'Simple home science like vinegar volcanoes' },
+    { id: 11, name: 'Drawing & Art', icon: '🎨', duration: '30 min', benefit: 'Fine Motor', ageRange: '2-10', description: 'Free drawing, coloring books, or crafts' },
+    { id: 12, name: 'Music & Singing', icon: '🎵', duration: '20 min', benefit: 'Emotional', ageRange: '1-10', description: 'Sing nursery rhymes or learn an instrument' },
+  ],
+};
+
+export const medicalRecords = [
+  { id: 1, name: 'Birth Certificate & Records', type: 'pdf', size: '2.4 MB', date: '2021-03-15', category: 'Birth Records' },
+  { id: 2, name: 'MMR Vaccination Certificate', type: 'pdf', size: '1.1 MB', date: '2021-12-15', category: 'Vaccination' },
+  { id: 3, name: 'Annual Checkup Report 2022', type: 'pdf', size: '3.2 MB', date: '2022-03-20', category: 'Reports' },
+  { id: 4, name: 'Allergy Test Results', type: 'pdf', size: '1.8 MB', date: '2022-08-10', category: 'Reports' },
+  { id: 5, name: 'Prescription - Amoxicillin', type: 'pdf', size: '0.5 MB', date: '2023-01-05', category: 'Prescription' },
+  { id: 6, name: 'Growth Chart 2023', type: 'image', size: '0.9 MB', date: '2023-03-15', category: 'Reports' },
+  { id: 7, name: 'Dental Checkup', type: 'pdf', size: '1.2 MB', date: '2023-06-20', category: 'Reports' },
+  { id: 8, name: 'Eye Exam Report', type: 'pdf', size: '0.7 MB', date: '2024-01-10', category: 'Reports' },
+];
+
+export const chatSuggestions = [
+  'My child is not eating vegetables. What should I do?',
+  'Is my child\'s weight normal for her age?',
+  'What foods are rich in iron for toddlers?',
+  'Which vaccine is due next for my child?',
+  'How much water should a 5-year-old drink daily?',
+  'My child has a fever of 101°F. What should I do?',
+  'What are signs of developmental milestones at age 3?',
+  'How do I handle my child\'s picky eating?',
+];
+
+export const aiResponses = {
+  'vegetables': 'Great question! Many toddlers go through phases of refusing vegetables. Here are some proven strategies:\n\n**1. Disguise vegetables** - Add spinach to smoothies, puree carrots into pasta sauce, or blend cauliflower into mashed potatoes.\n\n**2. Make it fun** - Cut veggies into fun shapes, arrange them as faces on a plate, or let your child pick vegetables at the store.\n\n**3. Repeated exposure** - Research shows children may need 10-15 exposures to a new food before accepting it. Keep offering without pressure.\n\n**4. Eat together** - Children model parents\' eating behaviors. Eat the same vegetables yourself enthusiastically.\n\n**5. Dips and sauces** - Hummus, peanut butter, or yogurt dip can make vegetables more appealing.\n\nRemember, this phase is very common and most children eventually expand their palate! 🥦',
+  'weight': 'Based on Emma\'s profile (age 5 years 4 months, weight 13.5 kg, height 92 cm):\n\n**BMI: 15.9** - This falls in the **Healthy Weight** range for her age and gender.\n\n📊 **Percentile**: Approximately 45th percentile for weight, 40th percentile for height — both within normal ranges.\n\n**Healthy weight range for her age**: 14-22 kg\n**Height-for-age**: Within normal growth curve\n\nKey indicators look good! Continue:\n- Regular balanced meals (3 meals + 2 snacks)\n- 1-1.5 hours of physical activity daily\n- Annual pediatric checkups\n\nWould you like a personalized nutrition plan to optimize her growth? 🌟',
+  'iron': 'Iron is crucial for children\'s brain development and energy levels! Here are excellent iron-rich foods for toddlers:\n\n**Animal sources (heme iron - best absorbed):**\n- Red meat (beef, lamb) - 2.7mg per 85g\n- Chicken & turkey (dark meat) - 1.1mg per 85g\n- Canned tuna or salmon - 1.3mg per 85g\n\n**Plant sources (non-heme iron):**\n- Lentils & beans - 3.3mg per ½ cup\n- Tofu - 3.4mg per ½ cup\n- Fortified cereals - up to 18mg per serving\n- Spinach - 3.2mg per ½ cup cooked\n- Dried fruits (raisins, apricots)\n\n**Pro tip**: Pair plant iron with Vitamin C (oranges, bell peppers, strawberries) to boost absorption by up to 3x! 🍊\n\n**Daily iron need for toddlers (1-3 yrs)**: 7mg/day\n**For kids (4-8 yrs)**: 10mg/day',
+  'vaccine': 'Based on Emma\'s vaccination record, here are the upcoming vaccines:\n\n**🔴 Most Urgent:**\n**MMR (2nd dose)** - Due: September 15, 2026\n- What it prevents: Measles, Mumps, Rubella\n- Where: Upper arm injection\n- Common side effects: Mild fever, soreness, rare rash\n\n**🟡 Coming Soon:**\n**DTP Booster** - Due: September 20, 2026\n**Annual Flu Vaccine** - Due: October 1, 2026\n\n**⚠️ Missed Vaccines:**\n- Typhoid vaccine (overdue since March 2023)\n- Hepatitis A 2nd dose (overdue since June 2023)\n\nI recommend scheduling these missed vaccines with your pediatrician as soon as possible. Would you like me to help you set up reminders? 📅',
+  'default': 'I\'m GrowNest AI, your intelligent parenting assistant! 🤖\n\nI can help you with:\n- **Child health** questions and concerns\n- **Nutrition** advice and meal planning\n- **Vaccination** schedules and information\n- **Growth & development** milestones\n- **Parenting tips** and behavioral guidance\n- **First aid** guidance for common childhood issues\n\nFeel free to ask me anything about your child\'s health and wellbeing. I\'m here to support your parenting journey! 💙\n\n*Note: While I provide general health information based on medical guidelines, always consult your pediatrician for personalized medical advice.*',
+};
