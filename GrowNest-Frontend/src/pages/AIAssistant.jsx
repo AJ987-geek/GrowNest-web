@@ -1,16 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Bot, Sparkles, RefreshCw } from 'lucide-react';
 import ChatBubble, { TypingBubble } from '../components/ChatBubble.jsx';
-import { chatSuggestions, aiResponses } from '../data/sampleData.js';
-
-const getResponse = (message) => {
-  const lower = message.toLowerCase();
-  if (lower.includes('vegetable') || lower.includes('eating')) return aiResponses.vegetables;
-  if (lower.includes('weight') || lower.includes('bmi') || lower.includes('normal')) return aiResponses.weight;
-  if (lower.includes('iron') || lower.includes('food')) return aiResponses.iron;
-  if (lower.includes('vaccine') || lower.includes('vaccination')) return aiResponses.vaccine;
-  return aiResponses.default;
-};
+import { chatSuggestions } from '../data/sampleData.js';
 
 const formatTime = () => {
   const now = new Date();
@@ -43,12 +34,38 @@ export default function AIAssistant() {
     setMessages(prev => [...prev, userMessage]);
     setTyping(true);
 
-    await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+    try {
+      const response = await fetch('https://grownest-ai.onrender.com/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg })
+      });
 
-    const response = getResponse(userMsg);
-    const aiMessage = { id: Date.now() + 1, role: 'assistant', content: response, time: formatTime() };
-    setMessages(prev => [...prev, aiMessage]);
-    setTyping(false);
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      setTyping(false);
+      const aiMessageId = Date.now() + 1;
+      setMessages(prev => [...prev, { id: aiMessageId, role: 'assistant', content: '', time: formatTime() }]);
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        if (value) {
+          const chunkValue = decoder.decode(value);
+          setMessages(prev => prev.map(msg => 
+            msg.id === aiMessageId ? { ...msg, content: msg.content + chunkValue } : msg
+          ));
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setMessages(prev => [...prev, { id: Date.now() + 1, role: 'assistant', content: 'Sorry, I am currently unable to connect to the AI server. Please try again later.', time: formatTime() }]);
+      setTyping(false);
+    }
   };
 
   const handleKeyDown = (e) => {
