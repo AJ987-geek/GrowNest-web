@@ -1,3 +1,6 @@
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 export default function ChatBubble({ message }) {
   const isUser = message.role === 'user';
 
@@ -11,15 +14,33 @@ export default function ChatBubble({ message }) {
       </div>
 
       {/* Bubble */}
-      <div className={`max-w-[75%] ${isUser ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
+      <div className={`max-w-[85%] ${isUser ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
         <div
-          className={`px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+          className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
             isUser
-              ? 'bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-br-sm'
+              ? 'bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-br-sm whitespace-pre-wrap'
               : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-sm shadow-sm'
           }`}
         >
-          {message.content}
+          {isUser ? (
+            message.content
+          ) : (
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({node, ...props}) => <h1 className="text-xl font-black text-gray-900 dark:text-white mt-4 mb-3" {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mt-3 mb-2" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-md font-bold text-gray-800 dark:text-gray-100 mt-2 mb-1" {...props} />,
+                ul: ({node, ...props}) => <ul className="list-disc pl-5 space-y-1.5 mb-3" {...props} />,
+                ol: ({node, ...props}) => <ol className="list-decimal pl-5 space-y-1.5 mb-3" {...props} />,
+                li: ({node, ...props}) => <li className="text-sm" {...props} />,
+                p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                strong: ({node, ...props}) => <strong className="font-bold text-teal-700 dark:text-teal-400" {...props} />
+              }}
+            >
+              {message.content}
+            </ReactMarkdown>
+          )}
         </div>
         <span className="text-xs text-gray-400 px-1">{message.time}</span>
       </div>
