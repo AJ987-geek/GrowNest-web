@@ -221,23 +221,29 @@ app.delete('/api/records/:id', (req, res) => {
 // 1. Get all posts with author and like count
 app.get('/api/posts', (req, res) => {
     const sql = `
-        SELECT p.id, p.content, p.created_at, u.name, u.username, p.user_id,
+        SELECT p.id, p.title, p.content, p.created_at, u.name, u.username, u.avatar, p.user_id,
         (SELECT COUNT(*) FROM likes WHERE post_id = p.id) as likes_count
         FROM posts p
         JOIN users u ON p.user_id = u.id
         ORDER BY p.created_at DESC
     `;
     db.query(sql, (err, results) => {
-        if (err) return res.status(500).json({ error: 'Database error' });
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Database error' });
+        }
         res.json(results);
     });
 });
 
 // 2. Create a new post
 app.post('/api/posts', (req, res) => {
-    const { user_id, content } = req.body;
-    db.query("INSERT INTO posts (user_id, content) VALUES (?, ?)", [user_id, content], (err, result) => {
-        if (err) return res.status(500).json({ error: 'Database error' });
+    const { user_id, title, content } = req.body;
+    db.query("INSERT INTO posts (user_id, title, content) VALUES (?, ?, ?)", [user_id, title, content], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Database error' });
+        }
         res.status(201).json({ message: 'Post created!', id: result.insertId });
     });
 });
