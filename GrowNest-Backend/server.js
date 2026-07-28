@@ -14,7 +14,7 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Ensure uploads directory exists
-if (!fs.existsSync('uploads')){
+if (!fs.existsSync('uploads')) {
     fs.mkdirSync('uploads');
 }
 
@@ -81,7 +81,7 @@ app.put('/api/children/:id', (req, res) => {
     const { name, dob, gender, height, weight, bloodGroup, allergies, medicalHistory } = req.body;
     const sql = `UPDATE children SET name=?, dob=?, gender=?, height=?, weight=?, blood_group=?, allergies=?, medical_history=? WHERE id=?`;
     const allergiesStr = allergies ? JSON.stringify(allergies) : '[]';
-    
+
     // Convert full ISO string from React to strict MySQL date
     const formattedDob = dob ? dob.split('T')[0] : null;
 
@@ -119,7 +119,7 @@ app.get('/api/children/:childId/vaccinations', (req, res) => {
 
         db.query("SELECT dob FROM children WHERE id = ?", [childId], (err, childRes) => {
             if (err || childRes.length === 0) return res.status(404).json({ error: 'Child not found' });
-            
+
             const dob = childRes[0].dob;
             const template = [
                 { name: 'BCG (Tuberculosis)', label: 'At Birth', days: 0 },
@@ -185,7 +185,7 @@ app.post('/api/children/:childId/records', upload.single('file'), (req, res) => 
     const { name, category } = req.body;
     const fileType = req.file.mimetype.includes('image') ? 'image' : 'pdf';
     const fileSize = (req.file.size / 1024 / 1024).toFixed(1) + ' MB';
-    
+
     // Save metadata including the generated physical file name
     const sql = `INSERT INTO medical_records (child_id, name, file_type, file_size, record_date, category, file_name) VALUES (?, ?, ?, ?, CURDATE(), ?, ?)`;
     db.query(sql, [req.params.childId, name, fileType, fileSize, category, req.file.filename], (err, result) => {
@@ -212,6 +212,79 @@ app.delete('/api/records/:id', (req, res) => {
         db.query("DELETE FROM medical_records WHERE id = ?", [req.params.id], (err) => {
             res.json({ message: 'Deleted successfully' });
         });
+    });
+});
+// ==========================================
+// NEW COMMUNITY ROUTES
+// ==========================================
+
+// 1. Get all posts with author and like count
+app.get('/api/posts', (req, res) => {
+    const sql = `
+        SELECT p.id, p.content, p.created_at, u.name, u.username, p.user_id,
+        (SELECT COUNT(*) FROM likes WHERE post_id = p.id) as likes_count
+        FROM posts p
+        JOIN users u ON p.user_id = u.id
+        ORDER BY p.created_at DESC
+    `;
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json(results);
+    });
+});
+
+// 2. Create a new post
+app.post('/api/posts', (req, res) => {
+    const { user_id, content } = req.body;
+    db.query("INSERT INTO posts (user_id, content) VALUES (?, ?)", [user_id, content], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.status(201).json({ message: 'Post created!', id: result.insertId });
+    });
+});
+
+// 3. Delete a post
+app.delete('/api/posts/:id', (req, res) => {
+    db.query("DELETE FROM posts WHERE id = ?", [req.params.id], (err) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json({ message: 'Post deleted' });
+    });
+});
+
+// 4. Like / Unlike a post
+app.post('/api/posts/:id/like', (req, res) => {
+    const { user_id } = req.body;
+    const post_id = req.params.id;
+
+    db.query("SELECT * FROM likes WHERE post_id = ? AND user_id = ?", [post_id, user_id], (err, results) => {
+        if (results.length > 0) {
+            db.query("DELETE FROM likes WHERE post_id = ? AND user_id = ?", [post_id, user_id], () => res.json({ message: 'Unliked' }));
+        } else {
+            db.query("INSERT INTO likes (post_id, user_id) VALUES (?, ?)", [post_id, user_id], () => res.json({ message: 'Liked' }));
+        }
+    });
+});
+
+// 5. Get comments for a post
+app.get('/api/posts/:id/comments', (req, res) => {
+    const sql = `
+        SELECT c.id, c.content, c.created_at, u.name, u.username 
+        FROM comments c
+        JOIN users u ON c.user_id = u.id
+        WHERE c.post_id = ?
+        ORDER BY c.created_at ASC
+    `;
+    db.query(sql, [req.params.id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json(results);
+    });
+});
+
+// 6. Add a comment
+app.post('/api/posts/:id/comments', (req, res) => {
+    const { user_id, content } = req.body;
+    db.query("INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)", [req.params.id, user_id, content], (err) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json({ message: 'Comment added' });
     });
 });
 
