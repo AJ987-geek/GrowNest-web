@@ -222,7 +222,8 @@ app.delete('/api/records/:id', (req, res) => {
 app.get('/api/posts', (req, res) => {
     const sql = `
         SELECT p.id, p.title, p.content, p.created_at, u.name, u.username, u.avatar, p.user_id,
-        (SELECT COUNT(*) FROM likes WHERE post_id = p.id) as likes_count
+        (SELECT COUNT(*) FROM likes WHERE post_id = p.id) as likes_count,
+        (SELECT COUNT(*) FROM comments WHERE post_id = p.id) as comments_count
         FROM posts p
         JOIN users u ON p.user_id = u.id
         ORDER BY p.created_at DESC

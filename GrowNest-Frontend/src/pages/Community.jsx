@@ -195,7 +195,7 @@ export default function Community() {
                   className="flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 p-1.5 rounded transition-colors"
                 >
                   <MessageSquare className="w-4 h-4" />
-                  {commentsData[post.id]?.length || 0} Comments
+                  {post.comments_count || 0} Comments
                 </button>
               </div>
 
