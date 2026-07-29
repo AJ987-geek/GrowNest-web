@@ -77,6 +77,7 @@ app.post('/api/children', (req, res) => {
     });
 });
 
+// Update child profile AND automatically save a growth record
 app.put('/api/children/:id', (req, res) => {
     const { name, dob, gender, height, weight, bloodGroup, allergies, medicalHistory } = req.body;
     const sql = `UPDATE children SET name=?, dob=?, gender=?, height=?, weight=?, blood_group=?, allergies=?, medical_history=? WHERE id=?`;
@@ -90,10 +91,29 @@ app.put('/api/children/:id', (req, res) => {
             console.error("❌ DATABASE UPDATE ERROR:", err);
             return res.status(500).json({ error: 'Database error' });
         }
+
+        // --- NEW: Automatically log the height and weight to growth_records ---
+        // Get the current month name (e.g., "Jul")
+        const currentMonth = new Date().toLocaleString('default', { month: 'short' });
+
+        db.query(
+            "INSERT INTO growth_records (child_id, month, height, weight) VALUES (?, ?, ?, ?)",
+            [req.params.id, currentMonth, height, weight]
+        );
+
         res.json({ message: 'Child profile updated!' });
     });
 });
 
+// NEW: Fetch growth records for the dashboard chart
+app.get('/api/children/:childId/growth', (req, res) => {
+    // Get the last 12 records ordered chronologically
+    db.query("SELECT month, height, weight FROM growth_records WHERE child_id = ? ORDER BY recorded_at ASC LIMIT 12", [req.params.childId], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+
+        res.json(results);
+    });
+});
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
     db.query("SELECT id, password_hash FROM users WHERE email = ?", [email], (err, results) => {
