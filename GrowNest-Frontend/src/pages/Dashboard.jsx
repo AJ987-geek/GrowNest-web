@@ -6,16 +6,30 @@ import { calculateAge, calculateBMI, getBMIStatus, getHealthScore } from '../uti
 import DashboardCard from '../components/DashboardCard.jsx';
 import { GrowthChart } from '../components/GrowthChart.jsx';
 import { CardSkeleton } from '../components/LoadingSkeleton.jsx';
-import { growthData, vaccineData } from '../data/sampleData.js';
+import { vaccineData } from '../data/sampleData.js';
 
 export default function Dashboard() {
   const { child, appLoading } = useApp();
   const [loading, setLoading] = useState(true);
+  const [realGrowthData, setRealGrowthData] = useState([]);
 
   useEffect(() => {
+    const fetchGrowthData = async () => {
+      if (child?.id) {
+        try {
+          const res = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/growth`);
+          const data = await res.json();
+          setRealGrowthData(data);
+        } catch (err) {
+          console.error("Failed to load growth data:", err);
+        }
+      }
+    };
+
+    fetchGrowthData();
     const t = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(t);
-  }, []);
+  }, [child]);
 
   if (appLoading) {
     return <div className="flex h-[50vh] items-center justify-center">Loading dashboard...</div>;
@@ -93,7 +107,7 @@ export default function Dashboard() {
               Full report <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
-          <GrowthChart data={growthData} />
+          <GrowthChart data={realGrowthData} />
         </div>
 
         {/* Quick stats */}
