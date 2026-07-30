@@ -65,10 +65,14 @@ export default function Login() {
     }
   };
   return (
-    <div className="min-h-screen flex bg-white dark:bg-gray-900">
+    <div className="min-h-screen flex relative overflow-hidden bg-white dark:bg-gray-900">
+      {/* Decorative circles for the entire page */}
+      <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-primary-50 dark:bg-gray-800/30 blur-2xl" />
+      <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-teal-50 dark:bg-gray-800/30 blur-2xl" />
+
       {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden border-r border-gray-100 dark:border-gray-800">
-        <div className="relative z-10 flex flex-col justify-center px-12 text-gray-900 dark:text-white">
+      <div className="hidden lg:flex lg:w-1/2 relative z-10 border-r border-gray-100 dark:border-gray-800">
+        <div className="flex flex-col justify-center px-12 text-gray-900 dark:text-white w-full">
           <Link to="/" className="flex items-center gap-2 mb-12">
             <img src="/logo.png" alt="GrowNest Logo" className="w-14 h-14 object-cover" />
             <span className="text-2xl font-black gradient-text">GrowNest</span>
@@ -88,9 +92,6 @@ export default function Login() {
             ))}
           </div>
         </div>
-        {/* Decorative circles */}
-        <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-primary-50 dark:bg-gray-800/50" />
-        <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-teal-50 dark:bg-gray-800/50" />
       </div>
 
       {/* Right panel */}
