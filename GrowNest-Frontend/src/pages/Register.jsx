@@ -92,33 +92,33 @@ export default function Register() {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-teal-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
       {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-white dark:bg-gray-900 relative overflow-hidden border-r border-gray-100 dark:border-gray-800">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <div className="relative z-10 flex flex-col justify-center px-12 text-gray-900 dark:text-white">
           <Link to="/" className="flex items-center gap-2 mb-12">
-            <img src="/logo.png" alt="GrowNest Logo" className="w-14 h-14 object-cover mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl" />
-            <span className="text-2xl font-black gradient-text">GrowNest</span>
+            <img src="/logo.png" alt="GrowNest Logo" className="w-16 h-16 object-cover mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl" />
+            <span className="text-3xl font-black gradient-text">GrowNest</span>
           </Link>
-          <h2 className="text-4xl font-black mb-4 leading-tight">Join 50,000+ Families Today 🌟</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed mb-8">
+          <h2 className="text-5xl font-black mb-6 leading-tight">Join 50,000+ Families Today 🌟</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-xl leading-relaxed mb-10">
             Create your free account and start giving your child the best possible healthcare support.
           </p>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {[['Free Plan', 'No credit card needed'], ['AI Assistant', '24/7 support'], ['Secure', 'HIPAA compliant'], ['Multi-child', 'Up to 6 profiles']].map(([t, d]) => (
-              <div key={t} className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center flex-shrink-0">
-                  <div className="w-2 h-2 rounded-full bg-teal-600 dark:bg-teal-400" />
+              <div key={t} className="flex items-center gap-4">
+                <div className="w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center flex-shrink-0">
+                  <div className="w-3 h-3 rounded-full bg-teal-600 dark:bg-teal-400" />
                 </div>
                 <div className="flex flex-col">
-                   <span className="text-gray-800 dark:text-gray-200 text-sm font-bold">{t}</span>
-                   <span className="text-gray-500 dark:text-gray-400 text-xs">{d}</span>
+                   <span className="text-gray-800 dark:text-gray-200 text-lg font-bold">{t}</span>
+                   <span className="text-gray-500 dark:text-gray-400 text-sm">{d}</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
         {/* Decorative circles */}
-        <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-teal-50 dark:bg-gray-800/50" />
-        <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-primary-50 dark:bg-gray-800/50" />
+        <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-teal-50 dark:bg-gray-800/50" />
+        <div className="absolute -top-10 -left-10 w-64 h-64 rounded-full bg-primary-50 dark:bg-gray-800/50" />
       </div>
 
       {/* Right panel */}

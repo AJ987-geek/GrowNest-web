@@ -67,30 +67,30 @@ export default function Login() {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-primary-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
       {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-white dark:bg-gray-900 relative overflow-hidden border-r border-gray-100 dark:border-gray-800">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <div className="relative z-10 flex flex-col justify-center px-12 text-gray-900 dark:text-white">
           <Link to="/" className="flex items-center gap-2 mb-12">
-            <img src="/logo.png" alt="GrowNest Logo" className="w-14 h-14 object-cover mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl" />
-            <span className="text-2xl font-black gradient-text">GrowNest</span>
+            <img src="/logo.png" alt="GrowNest Logo" className="w-16 h-16 object-cover mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl" />
+            <span className="text-3xl font-black gradient-text">GrowNest</span>
           </Link>
-          <h2 className="text-4xl font-black mb-4 leading-tight">Welcome Back, Super Parent! 👋</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed mb-8">
+          <h2 className="text-5xl font-black mb-6 leading-tight">Welcome Back, Super Parent! 👋</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-xl leading-relaxed mb-10">
             Sign in to access your child's complete health dashboard, AI assistant, and personalized insights.
           </p>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {['Real-time health monitoring', 'AI-powered recommendations', 'Vaccination schedule tracker', 'Community support'].map(f => (
-              <div key={f} className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
-                  <div className="w-2 h-2 rounded-full bg-primary-600 dark:bg-primary-400" />
+              <div key={f} className="flex items-center gap-4">
+                <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+                  <div className="w-2.5 h-2.5 rounded-full bg-primary-600 dark:bg-primary-400" />
                 </div>
-                <span className="text-gray-600 dark:text-gray-300 text-sm font-medium">{f}</span>
+                <span className="text-gray-600 dark:text-gray-300 text-lg font-medium">{f}</span>
               </div>
             ))}
           </div>
         </div>
         {/* Decorative circles */}
-        <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-primary-50 dark:bg-gray-800/50" />
-        <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-teal-50 dark:bg-gray-800/50" />
+        <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-primary-50 dark:bg-gray-800/50" />
+        <div className="absolute -top-10 -left-10 w-64 h-64 rounded-full bg-teal-50 dark:bg-gray-800/50" />
       </div>
 
       {/* Right panel */}
