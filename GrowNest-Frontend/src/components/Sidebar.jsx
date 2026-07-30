@@ -40,7 +40,7 @@ export default function Sidebar({ open, onClose }) {
       {/* Logo */}
       <div className="flex items-center justify-between px-6 h-16 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
         <Link to="/" className="flex items-center gap-2">
-          <img src="/logo.jpeg" alt="GrowNest Logo" className="w-10 h-10 rounded-xl object-cover shadow-sm" />
+          <img src="/logo.png" alt="GrowNest Logo" className="w-10 h-10 rounded-xl shadow-sm" />
           <span className="text-lg font-bold gradient-text">GrowNest</span>
         </Link>
         <button onClick={onClose} className="lg:hidden p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition">
