@@ -21,9 +21,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-xl gradient-bg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-              <Heart className="w-4 h-4 text-white" fill="white" />
-            </div>
+            <img src="/logo.jpeg" alt="GrowNest Logo" className="w-10 h-10 rounded-xl object-cover shadow-md group-hover:scale-105 transition-transform" />
             <span className="text-xl font-bold gradient-text">GrowNest</span>
           </Link>
 
