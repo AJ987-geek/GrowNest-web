@@ -90,130 +90,109 @@ export default function Register() {
   const strength = passwordStrength();
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-teal-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
-      {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-teal-500 to-primary-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10" />
-        <div className="relative z-10 flex flex-col justify-center px-12 text-white">
-          <Link to="/" className="flex items-center gap-2 mb-12">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" fill="white" />
-            </div>
-            <span className="text-2xl font-black">GrowNest AI</span>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-50 dark:bg-gray-950 p-4 sm:p-8">
+      {/* 3D Depth Animated Orbs */}
+      <div className="absolute top-0 -left-20 w-[600px] h-[600px] rounded-full bg-primary-300/30 dark:bg-primary-900/40 blur-[100px] animate-pulse" style={{ animationDuration: '4s' }} />
+      <div className="absolute bottom-0 -right-20 w-[600px] h-[600px] rounded-full bg-teal-300/30 dark:bg-teal-900/40 blur-[100px] animate-pulse" style={{ animationDuration: '6s' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-[100%] bg-indigo-300/20 dark:bg-indigo-900/30 blur-[120px] -z-0" />
+
+      {/* Main Glassmorphism Card (Single Div, No Partitions) */}
+      <div className="relative z-10 w-full max-w-md bg-white/70 dark:bg-gray-900/70 backdrop-blur-3xl rounded-3xl shadow-[0_35px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] border border-white/50 dark:border-gray-700/50 p-8 sm:p-10">
+        
+        {/* Logo and Header */}
+        <div className="text-center mb-10">
+          <Link to="/" className="inline-flex items-center gap-3 mb-6">
+            <img src="/logo.png" alt="GrowNest Logo" className="w-16 h-16 object-cover mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl" />
+            <span className="text-3xl font-black gradient-text">GrowNest</span>
           </Link>
-          <h2 className="text-4xl font-black mb-4">Join 50,000+ Families Today 🌟</h2>
-          <p className="text-teal-100 text-lg mb-8">Create your free account and start giving your child the best possible healthcare support.</p>
-          <div className="grid grid-cols-2 gap-4">
-            {[['Free Plan', 'No credit card needed'], ['AI Assistant', '24/7 support'], ['Secure', 'HIPAA compliant'], ['Multi-child', 'Up to 6 profiles']].map(([t, d]) => (
-              <div key={t} className="bg-white/10 rounded-xl p-3">
-                <p className="font-bold text-sm mb-1">{t}</p>
-                <p className="text-teal-100 text-xs">{d}</p>
-              </div>
-            ))}
-          </div>
+          <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2">Create Account 🌟</h1>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            Start giving your child the best healthcare support.
+          </p>
         </div>
-        <div className="absolute -bottom-16 -right-16 w-64 h-64 rounded-full bg-white/10" />
-      </div>
 
-      {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center px-4 sm:px-8 py-8">
-        <div className="w-full max-w-md">
-          <Link to="/" className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow">
-              <Heart className="w-4 h-4 text-white" fill="white" />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="label">Parent Full Name</label>
+            <div className="relative">
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
+              <input type="text" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                className={`input pl-11 py-3 ${errors.name ? 'border-red-400 focus:ring-red-400' : 'bg-white/50 dark:bg-gray-800/50'}`} placeholder="Sarah Johnson" />
             </div>
-            <span className="text-xl font-bold gradient-text">GrowNest AI</span>
-          </Link>
+            {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+          </div>
 
-          <div className="card p-8 shadow-xl">
-            <h1 className="text-2xl font-black text-gray-900 dark:text-white mb-1">Create Account</h1>
-            <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-              Already have an account?{' '}
-              <Link to="/login" className="text-primary-600 dark:text-primary-400 font-semibold hover:underline">Sign in</Link>
-            </p>
+          <div>
+            <label className="label">Email Address</label>
+            <div className="relative">
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
+              <input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                className={`input pl-11 py-3 ${errors.email ? 'border-red-400 focus:ring-red-400' : 'bg-white/50 dark:bg-gray-800/50'}`} placeholder="sarah@example.com" />
+            </div>
+            {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+          </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="label">Parent Full Name</label>
-                <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input type="text" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                    className={`input pl-10 ${errors.name ? 'border-red-400' : ''}`} placeholder="Sarah Johnson" />
-                </div>
-                {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
-              </div>
-
-              <div>
-                <label className="label">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                    className={`input pl-10 ${errors.email ? 'border-red-400' : ''}`} placeholder="sarah@example.com" />
-                </div>
-                {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
-              </div>
-
-              <div>
-                <label className="label">Password</label>
-                <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input type={showPass ? 'text' : 'password'} value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-                    className={`input pl-10 pr-10 ${errors.password ? 'border-red-400' : ''}`} placeholder="Min. 8 characters" />
-                  <button type="button" onClick={() => setShowPass(!showPass)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
-                    {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-                {form.password && (
-                  <div className="mt-2">
-                    <div className="flex gap-1 mb-1">
-                      {[1, 2, 3, 4].map(i => (
-                        <div key={i} className={`h-1 flex-1 rounded-full transition-colors ${i <= strength.score ? strength.color : 'bg-gray-200 dark:bg-gray-700'}`} />
-                      ))}
-                    </div>
-                    <p className="text-xs text-gray-500">{strength.label} password</p>
-                  </div>
-                )}
-                {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
-              </div>
-
-              <div>
-                <label className="label">Confirm Password</label>
-                <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input type="password" value={form.confirm} onChange={e => setForm(p => ({ ...p, confirm: e.target.value }))}
-                    className={`input pl-10 ${errors.confirm ? 'border-red-400' : ''}`} placeholder="Repeat password" />
-                  {form.confirm && form.password === form.confirm && (
-                    <Check className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
-                  )}
-                </div>
-                {errors.confirm && <p className="text-xs text-red-500 mt-1">{errors.confirm}</p>}
-              </div>
-
-              <div>
-                <label className="flex items-start gap-2.5 cursor-pointer">
-                  <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    I agree to the{' '}
-                    <a href="#" className="text-primary-600 dark:text-primary-400 font-medium hover:underline">Terms of Service</a>
-                    {' '}and{' '}
-                    <a href="#" className="text-primary-600 dark:text-primary-400 font-medium hover:underline">Privacy Policy</a>
-                  </span>
-                </label>
-                {errors.agreed && <p className="text-xs text-red-500 mt-1">{errors.agreed}</p>}
-              </div>
-
-              <button type="submit" disabled={loading} className="btn-primary w-full text-base py-3.5 mt-2">
-                {loading ? (
-                  <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Creating account...</>
-                ) : (
-                  <><span>Create Account</span><ArrowRight className="w-4 h-4" /></>
-                )}
+          <div>
+            <label className="label">Password</label>
+            <div className="relative">
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
+              <input type={showPass ? 'text' : 'password'} value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
+                className={`input pl-11 pr-11 py-3 ${errors.password ? 'border-red-400 focus:ring-red-400' : 'bg-white/50 dark:bg-gray-800/50'}`} placeholder="Min. 8 characters" />
+              <button type="button" onClick={() => setShowPass(!showPass)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
+                {showPass ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
               </button>
-            </form>
+            </div>
+            {form.password && (
+              <div className="mt-2">
+                <div className="flex gap-1 mb-1">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className={`h-1 flex-1 rounded-full transition-colors ${i <= strength.score ? strength.color : 'bg-gray-200 dark:bg-gray-700'}`} />
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500">{strength.label} password</p>
+              </div>
+            )}
+            {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
           </div>
-        </div>
+
+          <div>
+            <label className="label">Confirm Password</label>
+            <div className="relative">
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
+              <input type="password" value={form.confirm} onChange={e => setForm(p => ({ ...p, confirm: e.target.value }))}
+                className={`input pl-11 py-3 ${errors.confirm ? 'border-red-400 focus:ring-red-400' : 'bg-white/50 dark:bg-gray-800/50'}`} placeholder="Repeat password" />
+              {form.confirm && form.password === form.confirm && (
+                <Check className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-emerald-500" />
+              )}
+            </div>
+            {errors.confirm && <p className="text-xs text-red-500 mt-1">{errors.confirm}</p>}
+          </div>
+
+          <div className="pt-2">
+            <label className="flex items-start gap-2.5 cursor-pointer">
+              <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                I agree to the <a href="#" className="text-primary-600 dark:text-primary-400 font-medium hover:underline">Terms of Service</a> and <a href="#" className="text-primary-600 dark:text-primary-400 font-medium hover:underline">Privacy Policy</a>
+              </span>
+            </label>
+            {errors.agreed && <p className="text-xs text-red-500 mt-1">{errors.agreed}</p>}
+          </div>
+
+          <button type="submit" disabled={loading} className="btn-primary w-full text-base py-3.5 shadow-lg shadow-primary-500/30 mt-4">
+            {loading ? (
+              <><div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Creating account...</>
+            ) : (
+              <><span>Create Account</span><ArrowRight className="w-5 h-5" /></>
+            )}
+          </button>
+        </form>
+
+        <p className="text-center text-gray-500 dark:text-gray-400 text-sm mt-8 mb-2">
+          Already have an account?{' '}
+          <Link to="/login" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">Sign in</Link>
+        </p>
       </div>
     </div>
   );
