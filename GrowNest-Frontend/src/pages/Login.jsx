@@ -95,7 +95,7 @@ export default function Login() {
       </div>
 
       {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center px-4 sm:px-8">
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-8 relative z-10">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <Link to="/" className="lg:hidden flex items-center gap-2 mb-8 justify-center">

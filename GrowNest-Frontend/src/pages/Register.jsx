@@ -123,7 +123,7 @@ export default function Register() {
       </div>
 
       {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center px-4 sm:px-8 py-8">
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-8 py-8 relative z-10">
         <div className="w-full max-w-md">
           <Link to="/" className="lg:hidden flex items-center gap-2 mb-8 justify-center">
             <img src="/logo.png" alt="GrowNest Logo" className="w-14 h-14 object-cover mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl" />
