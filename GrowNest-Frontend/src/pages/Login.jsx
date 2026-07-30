@@ -77,7 +77,7 @@ export default function Login() {
         {/* Logo and Header */}
         <div className="text-center mb-10">
           <Link to="/" className="inline-flex items-center gap-3 mb-6">
-            <img src="/logo.png" alt="GrowNest Logo" className="w-16 h-16 object-cover" />
+            <img src="/logo.png" alt="GrowNest Logo" className="w-16 h-16 object-cover mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl" />
             <span className="text-3xl font-black gradient-text">GrowNest</span>
           </Link>
           <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2">Welcome Back! 👋</h1>
