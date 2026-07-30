@@ -90,9 +90,13 @@ export default function Register() {
   const strength = passwordStrength();
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-teal-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <div className="min-h-screen flex relative overflow-hidden bg-gradient-to-br from-teal-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+      {/* Decorative circles */}
+      <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-teal-100/50 dark:bg-gray-800/50 blur-2xl" />
+      <div className="absolute -top-10 -left-10 w-80 h-80 rounded-full bg-primary-100/50 dark:bg-gray-800/50 blur-2xl" />
+
       {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative">
         <div className="relative z-10 flex flex-col justify-center px-12 text-gray-900 dark:text-white">
           <Link to="/" className="flex items-center gap-2 mb-12">
             <img src="/logo.png" alt="GrowNest Logo" className="w-16 h-16 object-cover mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl" />
@@ -116,9 +120,6 @@ export default function Register() {
             ))}
           </div>
         </div>
-        {/* Decorative circles */}
-        <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-teal-50 dark:bg-gray-800/50" />
-        <div className="absolute -top-10 -left-10 w-64 h-64 rounded-full bg-primary-50 dark:bg-gray-800/50" />
       </div>
 
       {/* Right panel */}
