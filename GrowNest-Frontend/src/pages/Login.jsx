@@ -71,7 +71,9 @@ export default function Login() {
         <div className="absolute inset-0 bg-black/10" />
         <div className="relative z-10 flex flex-col justify-center px-12 text-white">
           <Link to="/" className="flex items-center gap-2 mb-12">
-            <img src="/logo.png" alt="GrowNest Logo" className="w-12 h-12 object-cover" />
+            <div className="bg-white rounded-xl p-1.5 shadow-md">
+              <img src="/logo.png" alt="GrowNest Logo" className="w-10 h-10 object-cover" />
+            </div>
             <span className="text-2xl font-black">GrowNest</span>
           </Link>
           <h2 className="text-4xl font-black mb-4 leading-tight">Welcome Back, Super Parent! 👋</h2>
@@ -99,7 +101,9 @@ export default function Login() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <Link to="/" className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <img src="/logo.png" alt="GrowNest Logo" className="w-12 h-12 object-cover" />
+            <div className="bg-white rounded-xl p-1.5 shadow-md">
+              <img src="/logo.png" alt="GrowNest Logo" className="w-10 h-10 object-cover" />
+            </div>
             <span className="text-xl font-bold gradient-text">GrowNest</span>
           </Link>
 
