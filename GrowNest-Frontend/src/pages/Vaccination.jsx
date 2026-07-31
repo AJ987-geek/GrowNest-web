@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Shield, CheckCircle, Clock, AlertCircle, Download, Calendar, X } from 'lucide-react';
 import VaccineCard from '../components/VaccineCard.jsx';
 import { useApp } from '../context/AppContext.jsx';
+import { formatDate } from '../utils/helpers.js';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -73,7 +74,7 @@ export default function Vaccination() {
       .filter(v => v.status === 'completed')
       .map(v => [
         v.name,
-        v.actual_date ? new Date(v.actual_date).toLocaleDateString() : (v.date ? new Date(v.date).toLocaleDateString() : 'N/A'),
+        v.actual_date ? formatDate(v.actual_date) : (v.date ? formatDate(v.date) : 'N/A'),
         v.batch_number || '-',
         v.clinic || '-',
         v.notes || '-'
@@ -93,7 +94,7 @@ export default function Vaccination() {
       .map(v => [
         v.name,
         v.dueAge,
-        new Date(v.date).toLocaleDateString(),
+        formatDate(v.date),
       ]);
       
     if (upcomingData.length > 0) {
