@@ -22,8 +22,8 @@ export default function Nutrition() {
   const fetchData = async () => {
     try {
       const [growthRes, nutRes] = await Promise.all([
-        fetch(`http://localhost:5000/api/children/${child.id}/growth`),
-        fetch(`http://localhost:5000/api/children/${child.id}/nutrition`)
+        fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/growth`),
+        fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/nutrition`)
       ]);
       const growth = await growthRes.json();
       const nut = await nutRes.json();
@@ -50,7 +50,7 @@ export default function Nutrition() {
     if (!mealInput.trim()) return;
     setScanning(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/children/${child.id}/nutrition/scan`, {
+      const res = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/nutrition/scan`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ meal_description: mealInput })
@@ -69,7 +69,7 @@ export default function Nutrition() {
   const handleReset = async () => {
     if (confirm("Are you sure you want to reset today's nutrition data?")) {
       try {
-        await fetch(`http://localhost:5000/api/children/${child.id}/nutrition/today`, { method: 'DELETE' });
+        await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/nutrition/today`, { method: 'DELETE' });
         fetchData();
       } catch(e) { console.error(e); }
     }
@@ -78,7 +78,7 @@ export default function Nutrition() {
   const handleResetGrowth = async () => {
     if (confirm("Are you sure you want to permanently delete all growth records for this child?")) {
       try {
-        await fetch(`http://localhost:5000/api/children/${child.id}/growth`, { method: 'DELETE' });
+        await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/growth`, { method: 'DELETE' });
         fetchData();
       } catch(e) { console.error(e); }
     }
@@ -89,7 +89,7 @@ export default function Nutrition() {
     const { month, height, weight } = growthForm;
     if (month && height && weight) {
       try {
-        await fetch(`http://localhost:5000/api/children/${child.id}/growth`, {
+        await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/growth`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ month, height: Number(height), weight: Number(weight) })

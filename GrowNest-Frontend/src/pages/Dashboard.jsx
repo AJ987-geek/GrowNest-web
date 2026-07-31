@@ -22,8 +22,8 @@ export default function Dashboard() {
       try {
         const [growthRes, nutRes, actRes] = await Promise.all([
           fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/growth`),
-          fetch(`http://localhost:5000/api/children/${child.id}/nutrition`),
-          fetch(`http://localhost:5000/api/children/${child.id}/activities`)
+          fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/nutrition`),
+          fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/activities`)
         ]);
         
         if (growthRes.ok) setRealGrowthData(await growthRes.json());

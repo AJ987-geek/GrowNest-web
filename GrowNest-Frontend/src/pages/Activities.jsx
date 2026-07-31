@@ -17,14 +17,14 @@ export default function Activities() {
   const fetchActivities = async () => {
     if (!child) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/children/${child.id}/activities`);
+      const res = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/activities`);
       if (res.ok) setActivities(await res.json());
     } catch (e) { console.error(e); }
   };
   const handleDelete = async (activityId) => {
     if (!window.confirm("Remove this activity?")) return;
     try {
-      await fetch(`http://localhost:5000/api/children/${child.id}/activities/${activityId}`, { method: 'DELETE' });
+      await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/activities/${activityId}`, { method: 'DELETE' });
       fetchActivities(); // Refresh the timeline!
     } catch (e) { console.error(e); }
   };
@@ -36,7 +36,7 @@ export default function Activities() {
   const handleAdd = async (activity) => {
     if (!child) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/children/${child.id}/activities`, {
+      const res = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/activities`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ activity_name: activity.name, category: tab })
