@@ -279,10 +279,65 @@ app.get('/api/children/:childId/vaccinations', (req, res) => {
     });
 });
 
+const vaccineSeries = {
+    'OPV 1': { next: 'OPV 2', minGapDays: 28 },
+    'OPV 2': { next: 'OPV 3', minGapDays: 28 },
+    'OPV 3': { next: 'OPV Booster', minGapDays: 28 },
+    'Pentavalent 1': { next: 'Pentavalent 2', minGapDays: 28 },
+    'Pentavalent 2': { next: 'Pentavalent 3', minGapDays: 28 },
+    'Rotavirus (RVV) 1': { next: 'Rotavirus (RVV) 2', minGapDays: 28 },
+    'Rotavirus (RVV) 2': { next: 'Rotavirus (RVV) 3', minGapDays: 28 },
+    'fIPV 1 (Polio)': { next: 'fIPV 2', minGapDays: 28 },
+    'PCV 1 (Pneumococcal)': { next: 'PCV 2', minGapDays: 28 },
+    'PCV 2': { next: 'PCV Booster', minGapDays: 28 },
+    'Measles & Rubella (MR) 1': { next: 'Measles & Rubella (MR) 2', minGapDays: 28 },
+    'JE 1': { next: 'JE 2', minGapDays: 90 },
+    'DPT Booster 1': { next: 'DPT Booster 2', minGapDays: 182 }
+};
+
 app.put('/api/vaccinations/:id', (req, res) => {
-    db.query("UPDATE vaccinations SET status = ? WHERE id = ?", [req.body.status, req.params.id], (err) => {
+    const { status, actual_date, batch_number, clinic, notes } = req.body;
+    
+    // 1. Update the current vaccine
+    const updateSql = `UPDATE vaccinations SET status = ?, actual_date = ?, batch_number = ?, clinic = ?, notes = ? WHERE id = ?`;
+    db.query(updateSql, [status, actual_date || null, batch_number || null, clinic || null, notes || null, req.params.id], (err) => {
         if (err) return res.status(500).json({ error: 'Database error' });
-        res.json({ message: 'Vaccine updated!' });
+        
+        // 2. Fetch the current vaccine to get its name and child_id
+        db.query("SELECT name, child_id FROM vaccinations WHERE id = ?", [req.params.id], (err, results) => {
+            if (err || results.length === 0 || status !== 'completed' || !actual_date) {
+                return res.json({ message: 'Vaccine updated!' });
+            }
+            
+            const currentVaccine = results[0];
+            const seriesInfo = vaccineSeries[currentVaccine.name];
+            
+            if (seriesInfo) {
+                // 3. Find the next vaccine in the series
+                db.query("SELECT id, original_date, date FROM vaccinations WHERE child_id = ? AND name = ?", [currentVaccine.child_id, seriesInfo.next], (err, nextResults) => {
+                    if (err || nextResults.length === 0) return res.json({ message: 'Vaccine logged!' });
+                    const nextVaccine = nextResults[0];
+                    
+                    // 4. Recalculate nextDueDate = max(original_date, actual_date + minGapDays)
+                    const actualDateObj = new Date(actual_date);
+                    const minAllowedDate = new Date(actualDateObj);
+                    minAllowedDate.setDate(minAllowedDate.getDate() + seriesInfo.minGapDays);
+                    
+                    // Use original_date if it exists, otherwise fallback to its current date
+                    const originalDateObj = new Date(nextVaccine.original_date || nextVaccine.date);
+                    
+                    const nextDueDate = minAllowedDate > originalDateObj ? minAllowedDate : originalDateObj;
+                    const nextDueDateStr = nextDueDate.toISOString().split('T')[0];
+                    
+                    // 5. Update next vaccine's date
+                    db.query("UPDATE vaccinations SET date = ? WHERE id = ?", [nextDueDateStr, nextVaccine.id], (err) => {
+                        res.json({ message: 'Vaccine logged & downstream recalculated!' });
+                    });
+                });
+            } else {
+                res.json({ message: 'Vaccine logged!' });
+            }
+        });
     });
 });
 
