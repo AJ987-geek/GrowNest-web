@@ -73,7 +73,7 @@ export default function Vaccination() {
       .filter(v => v.status === 'completed')
       .map(v => [
         v.name,
-        v.actual_date ? new Date(v.actual_date).toLocaleDateString() : 'N/A',
+        v.actual_date ? new Date(v.actual_date).toLocaleDateString() : (v.date ? new Date(v.date).toLocaleDateString() : 'N/A'),
         v.batch_number || '-',
         v.clinic || '-',
         v.notes || '-'
