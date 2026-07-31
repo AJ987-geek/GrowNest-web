@@ -3,7 +3,7 @@ import { Shield, CheckCircle, Clock, AlertCircle, Download, Calendar, X } from '
 import VaccineCard from '../components/VaccineCard.jsx';
 import { useApp } from '../context/AppContext.jsx';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 export default function Vaccination() {
   const { child, showToast } = useApp();
@@ -79,7 +79,7 @@ export default function Vaccination() {
         v.notes || '-'
       ]);
 
-    doc.autoTable({
+    autoTable(doc, {
       startY: 50,
       head: [['Vaccine', 'Date Given', 'Batch No.', 'Clinic', 'Notes']],
       body: tableData,
@@ -98,7 +98,7 @@ export default function Vaccination() {
       
     if (upcomingData.length > 0) {
       doc.text('Upcoming / Overdue Schedule', 14, doc.lastAutoTable.finalY + 15);
-      doc.autoTable({
+      autoTable(doc, {
         startY: doc.lastAutoTable.finalY + 20,
         head: [['Vaccine', 'Scheduled Age', 'Target Date']],
         body: upcomingData,
