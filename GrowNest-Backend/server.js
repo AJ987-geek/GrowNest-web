@@ -5,7 +5,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
-
+const Groq = require('groq-sdk');
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -114,6 +115,98 @@ app.get('/api/children/:childId/growth', (req, res) => {
         res.json(results);
     });
 });
+
+// NEW: POST manual growth record
+app.post('/api/children/:childId/growth', (req, res) => {
+    const { month, height, weight } = req.body;
+    if (!month || !height || !weight) return res.status(400).json({ error: 'Missing fields' });
+    const sql = "INSERT INTO growth_records (child_id, month, height, weight) VALUES (?, ?, ?, ?)";
+    db.query(sql, [req.params.childId, month, height, weight], (err) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+
+        // Synchronize with the main child profile
+        const updateSql = "UPDATE children SET height = ?, weight = ? WHERE id = ?";
+        db.query(updateSql, [height, weight, req.params.childId], (updateErr) => {
+            if (updateErr) console.error("Failed to sync profile:", updateErr);
+            res.json({ message: 'Growth record added and profile synced!' });
+        });
+    });
+});
+
+// NEW: Reset growth records
+app.delete('/api/children/:childId/growth', (req, res) => {
+    const sql = "DELETE FROM growth_records WHERE child_id = ?";
+    db.query(sql, [req.params.childId], (err) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json({ message: 'Growth records reset!' });
+    });
+});
+
+// NEW: GET last 7 days of nutrition data
+app.get('/api/children/:childId/nutrition', (req, res) => {
+    const sql = `
+        SELECT DATE_FORMAT(log_date, '%a') as day, calories, protein, carbs, fats, water
+        FROM nutrition_logs 
+        WHERE child_id = ? 
+        ORDER BY log_date DESC 
+        LIMIT 7
+    `;
+    db.query(sql, [req.params.childId], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json(results.reverse());
+    });
+});
+
+// NEW: Reset today's nutrition log
+app.delete('/api/children/:childId/nutrition/today', (req, res) => {
+    const sql = "UPDATE nutrition_logs SET calories=0, protein=0, carbs=0, fats=0, water=0 WHERE child_id = ? AND log_date = CURDATE()";
+    db.query(sql, [req.params.childId], (err) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json({ message: 'Reset successful' });
+    });
+});
+
+// NEW: POST /nutrition/scan (AI Meal Scanner)
+app.post('/api/children/:childId/nutrition/scan', async (req, res) => {
+    const { meal_description } = req.body;
+    if (!meal_description) return res.status(400).json({ error: 'Missing meal_description' });
+
+    try {
+        const prompt = `You are an expert nutritionist and a strict JSON API. Parse this meal: "${meal_description}".
+CRITICAL INSTRUCTION: You MUST calculate the total nutritional value based EXACTLY on the quantity, weight, or portion size specified. For example, if the user specifies "3 apples", you must multiply the macros of 1 apple by 3. If they say "500g of chicken", calculate the macros for exactly 500g.
+Return ONLY a valid JSON object with integer estimates for: calories, protein, carbs, fats, water.
+If water is mentioned, estimate in glasses (e.g. 1 glass = 1). If not mentioned, return 0 for water.
+Example format: {"calories": 350, "protein": 12, "carbs": 45, "fats": 8, "water": 1}`;
+
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [{ role: 'user', content: prompt }],
+            model: 'llama-3.1-8b-instant',
+            temperature: 0.1,
+            response_format: { type: 'json_object' }
+        });
+
+        const macros = JSON.parse(chatCompletion.choices[0].message.content);
+
+        // Upsert into nutrition_logs for today
+        const sql = `
+            INSERT INTO nutrition_logs (child_id, log_date, calories, protein, carbs, fats, water)
+            VALUES (?, CURDATE(), ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+            calories = calories + VALUES(calories),
+            protein = protein + VALUES(protein),
+            carbs = carbs + VALUES(carbs),
+            fats = fats + VALUES(fats),
+            water = water + VALUES(water)
+        `;
+        db.query(sql, [req.params.childId, macros.calories, macros.protein, macros.carbs, macros.fats, macros.water || 0], (err) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.json({ message: 'Meal logged!', macros });
+        });
+    } catch (error) {
+        console.error("AI Scan Error:", error);
+        res.status(500).json({ error: 'AI Processing failed' });
+    }
+});
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
     db.query("SELECT id, password_hash FROM users WHERE email = ?", [email], (err, results) => {
@@ -214,6 +307,28 @@ app.post('/api/children/:childId/records', upload.single('file'), (req, res) => 
     });
 });
 
+// ==========================================
+// NEW: ACTIVITIES ROUTES
+// ==========================================
+app.post('/api/children/:childId/activities', (req, res) => {
+    const { activity_name, category } = req.body;
+    if (!activity_name || !category) return res.status(400).json({ error: 'Missing fields' });
+    const sql = "INSERT INTO activity_logs (child_id, activity_name, category, log_date) VALUES (?, ?, ?, CURDATE())";
+    db.query(sql, [req.params.childId, activity_name, category], (err) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json({ message: 'Activity logged!' });
+    });
+});
+
+app.get('/api/children/:childId/activities', (req, res) => {
+    // Fetch last 7 days of activities
+    const sql = "SELECT * FROM activity_logs WHERE child_id = ? AND log_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) ORDER BY log_date DESC, created_at DESC";
+    db.query(sql, [req.params.childId], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json(results);
+    });
+});
+
 // Get all records for a child
 app.get('/api/children/:childId/records', (req, res) => {
     db.query("SELECT * FROM medical_records WHERE child_id = ? ORDER BY record_date DESC", [req.params.childId], (err, results) => {
@@ -232,6 +347,13 @@ app.delete('/api/records/:id', (req, res) => {
         db.query("DELETE FROM medical_records WHERE id = ?", [req.params.id], (err) => {
             res.json({ message: 'Deleted successfully' });
         });
+    });
+});
+app.delete('/api/children/:childId/activities/:activityId', (req, res) => {
+    const sql = "DELETE FROM activity_logs WHERE id = ? AND child_id = ?";
+    db.query(sql, [req.params.activityId, req.params.childId], (err) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.json({ message: 'Activity deleted!' });
     });
 });
 // ==========================================

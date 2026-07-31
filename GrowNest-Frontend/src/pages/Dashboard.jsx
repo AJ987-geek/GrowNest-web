@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Baby, Scale, Heart, Utensils, Activity, Syringe, ArrowRight, TrendingUp, Star, AlertCircle } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
-import { calculateAge, calculateBMI, getBMIStatus, getHealthScore } from '../utils/helpers.js';
+import { calculateAge, calculateBMI, getBMIStatus, getHealthScore, getAgeInYears, getNutritionScore, getActivityScore } from '../utils/helpers.js';
 import DashboardCard from '../components/DashboardCard.jsx';
 import { GrowthChart } from '../components/GrowthChart.jsx';
 import { CardSkeleton } from '../components/LoadingSkeleton.jsx';
@@ -12,23 +12,46 @@ export default function Dashboard() {
   const { child, appLoading } = useApp();
   const [loading, setLoading] = useState(true);
   const [realGrowthData, setRealGrowthData] = useState([]);
+  const [nutritionScore, setNutritionScore] = useState(0);
+  const [activityScore, setActivityScore] = useState(0);
 
   useEffect(() => {
-    const fetchGrowthData = async () => {
-      if (child?.id) {
-        try {
-          const res = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/growth`);
-          const data = await res.json();
-          setRealGrowthData(data);
-        } catch (err) {
-          console.error("Failed to load growth data:", err);
+    if (!child) return;
+
+    const fetchData = async () => {
+      try {
+        const [growthRes, nutRes, actRes] = await Promise.all([
+          fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/growth`),
+          fetch(`http://localhost:5000/api/children/${child.id}/nutrition`),
+          fetch(`http://localhost:5000/api/children/${child.id}/activities`)
+        ]);
+        
+        if (growthRes.ok) setRealGrowthData(await growthRes.json());
+        if (actRes.ok) setActivityScore(getActivityScore(await actRes.json()));
+        
+        if (nutRes.ok) {
+           const nut = await nutRes.json();
+           let todayData = { calories: 0, protein: 0, carbs: 0, water: 0 };
+           if (nut.length > 0) {
+               const latest = nut[nut.length - 1];
+               const todayStr = new Date().toISOString().split('T')[0];
+               if (latest.log_date && latest.log_date.startsWith(todayStr)) {
+                   todayData = latest;
+               } else if (!latest.log_date) {
+                   todayData = latest; // Fallback
+               }
+           }
+           const ageNum = getAgeInYears(child?.dob);
+           setNutritionScore(getNutritionScore(todayData, ageNum));
         }
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchGrowthData();
-    const t = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(t);
+    fetchData();
   }, [child]);
 
   if (appLoading) {
@@ -42,16 +65,16 @@ export default function Dashboard() {
   const age = calculateAge(child.dob);
   const bmi = calculateBMI(child.weight, child.height);
   const bmiStatus = getBMIStatus(bmi);
-  const healthScore = getHealthScore(parseFloat(bmi), 9, 87);
   const nextVaccine = vaccineData.find(v => v.status === 'upcoming');
   const missedVaccines = vaccineData.filter(v => v.status === 'missed').length;
+  const healthScore = getHealthScore(parseFloat(bmi), missedVaccines === 0 ? 5 : 2, nutritionScore);
 
   const cards = [
     { title: 'Child Age', value: age, subtitle: `Born ${child.dob}`, icon: Baby, gradient: 'bg-gradient-to-br from-blue-400 to-blue-600', trend: null },
     { title: 'BMI Status', value: bmi, subtitle: bmiStatus.label, icon: Scale, gradient: 'bg-gradient-to-br from-teal-400 to-teal-600', trend: 'up', trendValue: '+0.3' },
     { title: 'Health Score', value: `${healthScore}/100`, subtitle: healthScore >= 80 ? 'Excellent' : healthScore >= 60 ? 'Good' : 'Needs attention', icon: Heart, gradient: 'bg-gradient-to-br from-rose-400 to-rose-600', trend: 'up', trendValue: '+5' },
-    { title: 'Nutrition Score', value: '87/100', subtitle: 'Above average', icon: Utensils, gradient: 'bg-gradient-to-br from-emerald-400 to-emerald-600', trend: 'up', trendValue: '+2' },
-    { title: 'Activity Score', value: '72/100', subtitle: 'Moderate', icon: Activity, gradient: 'bg-gradient-to-br from-purple-400 to-purple-600', trend: 'down', trendValue: '-3' },
+    { title: 'Nutrition Score', value: `${nutritionScore}/100`, subtitle: nutritionScore >= 80 ? 'Excellent' : nutritionScore >= 50 ? 'On Track' : 'Needs attention', icon: Utensils, gradient: 'bg-gradient-to-br from-emerald-400 to-emerald-600', trend: nutritionScore >= 80 ? 'up' : 'down', trendValue: '' },
+    { title: 'Activity Score', value: `${activityScore}/100`, subtitle: activityScore >= 80 ? 'Highly Active' : activityScore >= 50 ? 'Moderate' : 'Needs more play', icon: Activity, gradient: 'bg-gradient-to-br from-purple-400 to-purple-600', trend: activityScore >= 80 ? 'up' : 'down', trendValue: '' },
     { title: 'Next Vaccine', value: nextVaccine ? nextVaccine.name : 'Up to date', subtitle: nextVaccine ? nextVaccine.date : '✓ All clear', icon: Syringe, gradient: 'bg-gradient-to-br from-amber-400 to-amber-600', trend: null },
   ];
 

@@ -54,3 +54,58 @@ export const getInitials = (name) => {
 export const cn = (...classes) => {
   return classes.filter(Boolean).join(' ');
 };
+
+export const getAgeInYears = (dob) => {
+  if (!dob) return 5;
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+  }
+  return Math.max(0, age);
+};
+
+export const getDailyTargets = (age) => {
+  if (age <= 3) return { calories: 1000, protein: 13, water: 4, carbs: 130 };
+  if (age <= 8) return { calories: 1400, protein: 19, water: 5, carbs: 130 };
+  if (age <= 13) return { calories: 1800, protein: 34, water: 7, carbs: 130 };
+  return { calories: 2200, protein: 46, water: 8, carbs: 130 };
+};
+
+export const getNutritionScore = (todayMacros, age) => {
+  if (!todayMacros) return 0;
+  const targets = getDailyTargets(age);
+  let score = 0;
+  
+  const calcCat = (current, target, weight) => {
+    if (!current) return 0;
+    const ratio = current / target;
+    if (ratio >= 0.8 && ratio <= 1.2) return weight; // Perfect
+    if (ratio < 0.8) return weight * (ratio / 0.8); // Under-eating
+    return Math.max(0, weight - ((ratio - 1.2) * weight)); // Over-eating penalty
+  };
+
+  score += calcCat(todayMacros.calories, targets.calories, 30);
+  score += calcCat(todayMacros.protein, targets.protein, 30);
+  score += calcCat(todayMacros.water, targets.water, 20);
+  score += calcCat(todayMacros.carbs, targets.carbs, 20);
+
+  return Math.round(score);
+};
+
+export const getActivityScore = (activities) => {
+  if (!activities || activities.length === 0) return 0;
+  
+  let score = 0;
+  activities.forEach(act => {
+    if (act.category === 'physical') {
+      score += 15;
+    } else if (act.category === 'learning') {
+      score += 10;
+    }
+  });
+
+  return Math.min(100, Math.round(score));
+};
