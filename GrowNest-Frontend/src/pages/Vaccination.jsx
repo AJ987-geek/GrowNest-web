@@ -74,7 +74,7 @@ export default function Vaccination() {
       .filter(v => v.status === 'completed')
       .map(v => [
         v.name,
-        v.actual_date ? formatDate(v.actual_date) : (v.date ? formatDate(v.date) : 'N/A'),
+        v.actual_date ? formatDate(v.actual_date) : 'Date not recorded',
         v.batch_number || '-',
         v.clinic || '-',
         v.notes || '-'
