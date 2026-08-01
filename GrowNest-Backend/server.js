@@ -68,6 +68,14 @@ app.get('/api/user/:userId/children', (req, res) => {
     });
 });
 
+app.get('/api/children/:id', (req, res) => {
+    db.query("SELECT * FROM children WHERE id = ?", [req.params.id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        if (results.length === 0) return res.status(404).json({ error: 'Child not found' });
+        res.json(results[0]);
+    });
+});
+
 app.post('/api/children', (req, res) => {
     const { user_id, name, dob, gender, height, weight, blood_group, allergies, medical_history } = req.body;
     const sql = `INSERT INTO children (user_id, name, dob, gender, height, weight, blood_group, allergies, medical_history) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
