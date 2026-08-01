@@ -37,26 +37,10 @@ export default function AIAssistant() {
     setTyping(true);
 
     try {
-      let child_context = '';
-      if (child) {
-        child_context = `Child Name: ${child.name}\nDate of Birth: ${new Date(child.dob).toLocaleDateString()}\nGender: ${child.gender}`;
-        try {
-          const vacRes = await fetch(`https://grownest-backend-5xa2.onrender.com/api/children/${child.id}/vaccinations`);
-          if (vacRes.ok) {
-            const vacData = await vacRes.json();
-            const missed = vacData.filter(v => v.status === 'missed').map(v => v.name).join(', ');
-            const completed = vacData.filter(v => v.status === 'completed').map(v => v.name).join(', ');
-            child_context += `\nCompleted Vaccines: ${completed || 'None'}\nMissed/Overdue Vaccines: ${missed || 'None'}`;
-          }
-        } catch (err) {
-          console.error('Failed to load DB context', err);
-        }
-      }
-
       const response = await fetch('https://grownest-ai.onrender.com/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg, child_context: child_context })
+        body: JSON.stringify({ message: userMsg, child_id: child ? child.id : null })
       });
 
       if (!response.ok) throw new Error('Network response was not ok');
