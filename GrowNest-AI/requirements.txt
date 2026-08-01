@@ -3,3 +3,5 @@ uvicorn
 groq
 pydantic
 jinja2
+chromadb
+sentence-transformers
