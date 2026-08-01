@@ -9,7 +9,7 @@ rag = RAGService()
 def chat(request: ChatRequest):
 
     return StreamingResponse(
-        rag.chat(request.message, request.child_context),
+        rag.chat(request.message, request.child_id),
 
         media_type="text/plain"
 

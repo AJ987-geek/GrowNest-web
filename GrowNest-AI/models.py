@@ -4,4 +4,4 @@ from pydantic import BaseModel
 
 class ChatRequest(BaseModel):
     message: str
-    child_context: str | None = None
+    child_id: int | str | None = None
